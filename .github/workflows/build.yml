@@ -230,16 +230,19 @@ jobs:
       # could potentially change to ncipollo/release-action as well
       - name: Draft Release Main Repo
         if: contains(github.ref, 'releas')
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         with:
-          files: obj/*.hex
           draft: true
           prerelease: true
+          allowUpdates: true
           #tag_name: ${{ github.run_number }} # use the build Number, but we MUST manually change to version to properly tag u  pon release
-          tag_name: ${{ env.VERSION }}
+          tag: ${{ env.VERSION }}
+          artifacts: obj/*.hex
+          artifactContentType: raw
           name:  DRAFT / EmuFlight ${{ env.VERSION }} / GitHub Build ${{ github.run_number }}
           body: |
             ## EmuFlight ${{ env.VERSION }}
+            ### Build ${{ github.run_number }}
             ### Commit SHA: ${{ needs.build.outputs.shortsha }} (${{ github.sha }})
             ### BuildTag: ${{ needs.build.outputs.buildtag }}
             ### Changes in this Release:
